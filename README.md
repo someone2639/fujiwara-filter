@@ -7,7 +7,7 @@ Is your Discord server's meme channel a mess of low-quality content?
 
 Is your server filled to the brim with people who can't bother cropping out their Reddit or iFunny watermark?
 
-Are you involved in a meme war started by [someone](https://soundcloud.com/someone2639) who cannot stop posting the same image macro with the same caption featuring the same anime girl?
+Are you involved in a meme war started by [someone](https://soundcloud.com/someone2639) who cannot stop posting the same [image macro](https://imgur.com/a/8Tfj0MX) with the same [caption](https://imgur.com/a/8Tfj0MX) featuring the same [anime girl](https://imgur.com/a/8Tfj0MX)?
 
 Then this project is for you!
 
