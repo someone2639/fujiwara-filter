@@ -1,13 +1,13 @@
 # Fujiwara Filter
 
-## A Discord bot that takes action against rampant meme variations
+## A Discord bot that takes action against rampant meme abuse
 
 
 Is your Discord server's meme channel a mess of low-quality content?
 
 Is your server filled to the brim with people who can't bother cropping out their Reddit or iFunny watermark?
 
-Are you currently in a meme war started by someone who cannot stop posting the same image macro with the same caption featuring the same anime girl?
+Are you involved in a meme war started by [someone](https://soundcloud.com/someone2639) who cannot stop posting the same image macro with the same caption featuring the same anime girl?
 
 Then this project is for you!
 
