@@ -2,7 +2,6 @@
 
 ## A Discord bot that takes action against rampant meme variations
 
----
 
 Is your Discord server's meme channel a mess of low-quality content?
 
@@ -12,7 +11,20 @@ Are you currently in a meme war started by someone who cannot stop posting the s
 
 Then this project is for you!
 
----
+Fujiwara Filter works (or at least _will_ work) in a 3-phase system:
+
+ 1. First, the bot checks against a known list of banned images (and eventually watermarks).
+ 2. Next, the bot detects any faces based on how you modify `bot.py`, and will react to when a certain color is prominent in the image (This works unexpectedly well with anime characters' hair)
+ 3. If both of these check fail, the bot will use OCR to detect banned phrases that you can configure (eventually)
+ 
+## Roadmap
+  - Face & color detection: **Working**
+  - Image Matching
+  - OCR
+  - Addition of configuration files for phrases and face detection parameters
+  - Actions the bot can take against offending users
+  - some easy way to install/set up the bot
+
 
 # Setup
 
@@ -30,12 +42,11 @@ python3 bot.py
 
 And you should be good to go! Try it out by posting images and seeing how it reacts (currently the bot does not actually ban/kick users, look out here for a specific section on configuring/testing the bot when those features are complete!)
 
----
 # FAQ
 
 ## What inspired this project?
 
-I have been "that guy" on many servers. This is for people like me who can take a joke a lot farther than people are willing to put up with.
+I have been "that guy" on many servers. This is for people like you who aren't willing to put up with people like me
 
 ## Can I get some bot result images?
 
