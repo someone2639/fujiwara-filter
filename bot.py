@@ -104,21 +104,63 @@ client = discord.Client()
 
 myChannel = None
 
+from discord.ext import commands
+from discord.utils import get
+
+
+bot = commands.Bot(command_prefix='!')
+
+# @bot.command(pass_context=True)
+# @commands.has_role("Admin") # This must be exactly the name of the appropriate role
+# async def addrole(ctx):
+#     member = ctx.message.author
+#     role = get(member.server.roles, name="Test")
+#     await bot.add_roles(member, role)
+
+
+async def channelSend(channel, mesg):
+	try:
+		await channel.send(mesg)
+	except Exception as e:
+		pass
+
 @client.event
 async def on_ready():
 	print(f'{client.user} has connected to Discord!')
 	for server in client.guilds:
 		for channel in server.channels:
 			if channel.name == 'general':
-				await channel.send("IM\n\nSTUPID")
+				await channelSend(channel, "IM\n\nSTUPID")
+
+def reddit(message):
+	print("reddit")
+
 @client.event
 async def on_message(message):
 	global filequeue
 	channel = message.channel
+	print(channel.name, message.author)
+	if message.author == client.user:
+		return
+	if channel.name == "rom-hack-portal":
+		return
+	if channel.name == "reddit":
+		reddit(message)
+		return
+
+	if channel.name == "terms-and-conditions":
+		if message.content == "im stupid":
+			x = [i for i in message.author.guild.roles if i.name == "stupid"][0]
+			print(x.id)
+			await message.author.add_roles(x)
+			await message.delete()
+		else:
+			await message.delete()
+		return
 	iscommand = 0
 	if message.content == '!stop':
 		print("logging out")
-		await channel.send("seeya idiot")
+		await channelSend(channel, "seeya idiot")
 		iscommand = 1
 		purgeCache()
 
@@ -128,7 +170,7 @@ async def on_message(message):
 		iscommand = 1
 		purgeCache()
 		print("logging out...")
-		await channel.send("restarting...")
+		await channelSend(channel, "restarting...")
 		subprocess.call(['sleep 2s && python3 bot.py'],shell = True)
 		await client.logout()
 		return
@@ -141,8 +183,7 @@ async def on_message(message):
 	if message.content == '!purge':
 		iscommand = 1
 		purgeCache()
-	if message.author == client.user:
-		return
+	
 	att = message.attachments
 	if len(att) > 0 and isImage(att[0].filename) and iscommand==0:
 		myChannel = message.channel
@@ -165,8 +206,8 @@ async def on_message(message):
 				tM = checkColors(hist)
 				if tM > matches:
 					matches=tM
-				plt.imshow(hist,interpolation = 'nearest')
-				plt.show()
+				# plt.imshow(hist,interpolation = 'nearest')
+				# plt.show()
 
 				# plt.hist(img.ravel(),256,[0,256])
 				# plt.show()
@@ -174,9 +215,9 @@ async def on_message(message):
 				print(channel)
 				print(picture)
 		if matches < 10:
-			await channel.send("{0} faces detected".format(numFaces))
+			await channelSend(channel, "%d faces detected" % numFaces)
 		else:
-			await channel.send("FUJIWARA DETECTED")
+			await channelSend(channel, "FUJIWARA DETECTED")
 		purgeCache()
 	else:
 		return
