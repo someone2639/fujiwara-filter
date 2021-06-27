@@ -54,8 +54,8 @@ def findFaceMaybe(imagePath):
 		print("[INFO] Object found. Saving locally.") 
 		cv.imwrite('detectedFaces/'+str(w) + str(h) + '_faces.jpg', roi_color) 
 
-	# status = cv.imwrite(makeImage('faces_detected.jpg'), image)
-	# print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
+	status = cv.imwrite(makeImage('faces_detected.jpg'), image)
+	print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
 	return len(faces)
 
 
@@ -69,7 +69,7 @@ def purgeCache():
 def isImage(fname):
 	global valid_img_urls
 	for i in valid_img_urls:
-		if i in fname:
+		if i in fname.lower():
 			return True
 	return False
 
@@ -118,9 +118,12 @@ bot = commands.Bot(command_prefix='!')
 #     await bot.add_roles(member, role)
 
 
-async def channelSend(channel, mesg):
+async def channelSend(channel, mesg,f=None):
 	try:
-		await channel.send(mesg)
+		if f:
+			await channel.send(mesg, file=f)
+		else:
+			await channel.send(mesg)
 	except Exception as e:
 		pass
 
@@ -129,11 +132,14 @@ async def on_ready():
 	print(f'{client.user} has connected to Discord!')
 	for server in client.guilds:
 		for channel in server.channels:
-			if channel.name == 'general':
+			if channel.name == 'overlord-bot-commands':
 				await channelSend(channel, "IM\n\nSTUPID")
 
 def reddit(message):
 	print("reddit")
+
+
+tempCreatedPaths = []
 
 @client.event
 async def on_message(message):
@@ -158,6 +164,16 @@ async def on_message(message):
 			await message.delete()
 		return
 	iscommand = 0
+
+	if channel.name == "overlord-bot-commands":
+		if "!s" in message.content:
+			ch = message.content.split()[1]
+			ms = message.content.split(ch)[1]
+			newch = discord.utils.get(client.get_all_channels(), name=ch)
+			await newch.send(ms)
+			
+			
+
 	if message.content == '!stop':
 		print("logging out")
 		await channelSend(channel, "seeya idiot")
@@ -174,6 +190,9 @@ async def on_message(message):
 		subprocess.call(['sleep 2s && python3 bot.py'],shell = True)
 		await client.logout()
 		return
+	elif message.content == 'true' and channel.name == "normal-people-bot-commands":
+		iscommand = 1
+		await channel.send("i can see it")
 	if message.content == '!printqueue':
 		iscommand = 1
 		print(filequeue)
@@ -193,6 +212,7 @@ async def on_message(message):
 		# compareImage('cacheDownload/'+att[0].filename)
 		matches = 0
 		numFaces = findFaceMaybe('cacheDownload/'+att[0].filename)
+		picture = None
 		for file in os.listdir('detectedFaces/'):
 			print(file)
 			with open('detectedFaces/'+file, 'rb') as f:
@@ -214,10 +234,13 @@ async def on_message(message):
 				picture = discord.File('detectedFaces/'+file)
 				print(channel)
 				print(picture)
-		if matches < 10:
-			await channelSend(channel, "%d faces detected" % numFaces)
+		if matches < 10 and matches > 0:
+			if channel.name == "normal-people-bot-commands":
+				await channel.send("%d faces detected" % numFaces, file=discord.File("./faces_detected.jpg"))
+		elif matches == 0:
+			pass
 		else:
-			await channelSend(channel, "FUJIWARA DETECTED")
+			await channel.send("FUJIWARA DETECTED", file=picture)
 		purgeCache()
 	else:
 		return
