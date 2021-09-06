@@ -160,17 +160,30 @@ async def on_message(message):
 			print(x.id)
 			await message.author.add_roles(x)
 			await message.delete()
+		elif message.content == "i agree":
+			x = [i for i in message.author.guild.roles if i.name == "fnf64"][0]
+			print(x.id)
+			await message.author.add_roles(x)
+			await message.delete()
 		else:
 			await message.delete()
 		return
 	iscommand = 0
 
 	if channel.name == "overlord-bot-commands":
+		t = message.content.split()
 		if "!s" in message.content:
-			ch = message.content.split()[1]
+			ch = t[1]
 			ms = message.content.split(ch)[1]
 			newch = discord.utils.get(client.get_all_channels(), name=ch)
-			await newch.send(ms)
+
+			att = message.attachments
+			if len(att) > 0 and isImage(att[0].filename):
+				os.system('wget -P cacheDownload/ '+att[0].url)
+				picture = discord.File('cacheDownload/'+att[0].filename)
+				await newch.send(ms, file=picture)
+			else:
+				await newch.send(ms)
 			
 			
 
