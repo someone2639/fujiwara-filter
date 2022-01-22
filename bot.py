@@ -6,6 +6,7 @@ import cv2 as cv
 import numpy as np
 from dotenv import load_dotenv
 from matplotlib import pyplot as plt
+from PIL import Image
 
 filequeue = []
 
@@ -36,12 +37,17 @@ def findFaceMaybe(imagePath):
 	image = cv.imread(imagePath,-1)
 	gray = cv.cvtColor(image, cv.COLOR_BGR2GRAY)
 
+	ii = Image.open(imagePath)
+	x, _ = ii.size
+
+	ii.close()
+
 	faceCascade = cv.CascadeClassifier("lbpcascade_animeface/lbpcascade_animeface.xml")
 	faces = faceCascade.detectMultiScale(gray,
                                      # detector options
                                      scaleFactor = 1.001,
                                      minNeighbors = 3,
-                                     minSize = (40, 40),
+                                     minSize = (int(x / 4), int(x / 4)),
                                      # maxSize = (200, 200)
                                      ) # TODO: change maxSize to a fraction of image size
 

@@ -1,0 +1,6 @@
+opencv-python
+numpy
+python-dotenv
+matplotlib
+py-cord
+
